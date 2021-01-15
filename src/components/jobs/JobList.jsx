@@ -7,6 +7,7 @@ import JobListItem from "./JobListItem";
 function JobList({ jobsState, getJobsAction }) {
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState();
+  const [selectedJobs, setSelectedJobs] = useState([]);
 
   useEffect(() => {
     getJobsAction();
@@ -23,6 +24,20 @@ function JobList({ jobsState, getJobsAction }) {
       return includeTitleFilter && job.completed;
     if (statusFilter === "pending") return includeTitleFilter && !job.completed;
     return includeTitleFilter;
+  }
+
+  function isSelectedJob(job) {
+    return selectedJobs.find((j) => j.id === job.id);
+  }
+
+  function toogleSelectedJob(job) {
+    if (isSelectedJob(job)) {
+      setSelectedJobs((currentSelectedJobs) =>
+        currentSelectedJobs.filter((j) => j.id !== job.id)
+      );
+    } else {
+      setSelectedJobs((currentSelectedJobs) => [...currentSelectedJobs, job]);
+    }
   }
 
   return (
@@ -93,7 +108,17 @@ function JobList({ jobsState, getJobsAction }) {
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    checked={selectedJobs.length === jobs.length}
+                    onClick={() => {
+                      if (selectedJobs.length !== jobs.length) {
+                        setSelectedJobs([...jobs]);
+                      } else {
+                        setSelectedJobs([]);
+                      }
+                    }}
+                  />
                 </th>
                 <th scope="col">ID</th>
                 <th scope="col">User id</th>
@@ -104,7 +129,12 @@ function JobList({ jobsState, getJobsAction }) {
             </thead>
             <tbody>
               {visibleJobs.map((job) => (
-                <JobListItem job={job} key={job.id} />
+                <JobListItem
+                  job={job}
+                  key={job.id}
+                  selected={isSelectedJob(job)}
+                  toogleSelectedJob={toogleSelectedJob}
+                />
               ))}
             </tbody>
           </table>

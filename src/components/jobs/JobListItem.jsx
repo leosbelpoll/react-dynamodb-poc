@@ -1,14 +1,26 @@
 import React, { Fragment } from "react";
 
-export default function JobListItem({ job }) {
+export default function JobListItem({ job, selected, toogleSelectedJob }) {
+  function showModalDetail() {
+    alert("sdsdsd");
+  }
+
   return (
-    <tr>
+    <tr className={selected && "table-success"}>
       <td>
-        <input type="checkbox" />
+        <input
+          type="checkbox"
+          checked={selected}
+          onClick={() => toogleSelectedJob(job)}
+        />
       </td>
       <th scope="row">{job.id}</th>
       <td>{job.userId}</td>
-      <td>{job.title}</td>
+      <td>
+        <a href="#" onClick={showModalDetail}>
+          {job.title}
+        </a>
+      </td>
       <td>
         {job.completed ? (
           <span className="badge bg-success">Completed</span>
