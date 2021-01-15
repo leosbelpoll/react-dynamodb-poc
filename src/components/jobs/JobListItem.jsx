@@ -6,7 +6,7 @@ export default function JobListItem({ job, selected, toogleSelectedJob }) {
   }
 
   return (
-    <tr className={selected && "table-success"}>
+    <tr className={selected && "table-secondary"}>
       <td>
         <input
           type="checkbox"
