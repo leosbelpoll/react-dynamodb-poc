@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { getJobsAction } from "../../redux/actions/jobActions";
 import PageTitle from "../parts/PageTitle";
 import JobListItem from "./JobListItem";
+import JobDetail from "./JobDetail";
 
 function JobList({ jobsState, getJobsAction }) {
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState();
   const [selectedJobs, setSelectedJobs] = useState([]);
+  const [detailedJob, setDetailedJob] = useState();
 
   useEffect(() => {
     getJobsAction();
@@ -40,40 +42,39 @@ function JobList({ jobsState, getJobsAction }) {
     }
   }
 
+  function retryJobs() {
+    alert(`Retrying jobs: ${selectedJobs.map((job) => job.title).toString()}`);
+  }
+
   return (
     <div>
       <PageTitle title="Job list" />
+      <JobDetail job={detailedJob} setDetailedJob={setDetailedJob} />
       {loading && <span>... Loading jobs</span>}
       {error && <span>An error ocurred loading jobs</span>}
       {jobs && !error && (
         <Fragment>
-          <div className="row g-2">
+          <div className="row g-2 mt-4 mb-4">
             <div className="col-sm-12 col-md-5 col-lg-3 offset-lg-4">
-              <div className="form-floating">
-                <input
-                  className="form-control"
-                  id="titleFilter"
-                  placeholder="Title"
-                  value={titleFilter}
-                  onChange={(e) => setTitleFilter(e.target.value)}
-                />
-                <label htmlFor="titleFilter">Title</label>
-              </div>
+              <input
+                className="form-control"
+                id="titleFilter"
+                placeholder="Title"
+                value={titleFilter}
+                onChange={(e) => setTitleFilter(e.target.value)}
+              />
             </div>
             <div className="col-sm-12 col-md-5 col-lg-3">
-              <div className="form-floating">
-                <select
-                  className="form-select"
-                  id="statusFilter"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <option>Select the status</option>
-                  <option value="completed">Completed</option>
-                  <option value="pending">Pending</option>
-                </select>
-                <label htmlFor="statusFilter">Status</label>
-              </div>
+              <select
+                className="form-select"
+                id="statusFilter"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+              >
+                <option>Select the status</option>
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+              </select>
             </div>
             <div className="col-2">
               <div className="btn-group" role="group">
@@ -88,12 +89,23 @@ function JobList({ jobsState, getJobsAction }) {
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="btnGroupDrop1">
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <a
+                      className={`dropdown-item ${
+                        !selectedJobs.length && "disabled"
+                      }`}
+                      href="#"
+                      onClick={retryJobs}
+                    >
                       Retry jobs
                     </a>
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
+                    <a
+                      className={`dropdown-item ${
+                        !selectedJobs.length && "disabled"
+                      }`}
+                      href="#"
+                    >
                       Remove jobs
                     </a>
                   </li>
@@ -134,6 +146,7 @@ function JobList({ jobsState, getJobsAction }) {
                   key={job.id}
                   selected={isSelectedJob(job)}
                   toogleSelectedJob={toogleSelectedJob}
+                  setDetailedJob={setDetailedJob}
                 />
               ))}
             </tbody>

@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 
-export default function JobListItem({ job, selected, toogleSelectedJob }) {
-  function showModalDetail() {
-    alert("sdsdsd");
-  }
-
+export default function JobListItem({
+  job,
+  selected,
+  toogleSelectedJob,
+  setDetailedJob,
+}) {
   return (
     <tr className={selected && "table-secondary"}>
       <td>
@@ -17,7 +18,12 @@ export default function JobListItem({ job, selected, toogleSelectedJob }) {
       <th scope="row">{job.id}</th>
       <td>{job.userId}</td>
       <td>
-        <a href="#" onClick={showModalDetail}>
+        <a
+          href="#"
+          onClick={() => setDetailedJob(job)}
+          data-bs-toggle="modal"
+          data-bs-target="#jobDetailModal"
+        >
           {job.title}
         </a>
       </td>
