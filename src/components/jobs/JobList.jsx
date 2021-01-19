@@ -1,11 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { getJobsAction } from "../../redux/actions/jobActions";
+import {
+  getJobsAction,
+  removeJobsAction,
+} from "../../redux/actions/jobActions";
 import PageTitle from "../parts/PageTitle";
 import JobListItem from "./JobListItem";
 import JobDetail from "./JobDetail";
+import {
+  addErrorNotification,
+  addSuccessNotification,
+} from "../../utils/notifications";
 
-function JobList({ jobsState, getJobsAction }) {
+function JobList({ jobsState, getJobsAction, removeJobsAction }) {
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("any");
   const [selectedJobs, setSelectedJobs] = useState([]);
@@ -45,6 +52,18 @@ function JobList({ jobsState, getJobsAction }) {
 
   function retryJobs() {
     alert(`Retrying jobs: ${selectedJobs.map((job) => job.title).toString()}`);
+  }
+
+  function removeJobs() {
+    const removeJobsConfirmation = window.confirm("Are you sure?");
+    if (removeJobsConfirmation) {
+      try {
+        removeJobsAction(selectedJobs);
+        addSuccessNotification("Jobs removes successfuly");
+      } catch (error) {
+        addErrorNotification("Oops: Error removing jobs");
+      }
+    }
   }
 
   return (
@@ -107,6 +126,7 @@ function JobList({ jobsState, getJobsAction }) {
                         !selectedJobs.length && "disabled"
                       }`}
                       href="#"
+                      onClick={() => removeJobs()}
                     >
                       Remove jobs
                     </a>
@@ -167,6 +187,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getJobsAction: () => dispatch(getJobsAction()),
+    removeJobsAction: (jobs) => {
+      const ids = jobs.map((job) => job.id);
+      dispatch(removeJobsAction(ids));
+    },
   };
 };
 

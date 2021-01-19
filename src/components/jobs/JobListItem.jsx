@@ -105,8 +105,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getJob: (id) => dispatch(getJobAction(id)),
     removeJob: (job) => {
-      const removeJob = window.confirm("Are you sure?");
-      if (removeJob) {
+      const removeJobConfirmation = window.confirm("Are you sure?");
+      if (removeJobConfirmation) {
         const { id, title } = job;
         try {
           dispatch(removeJobAction(id));

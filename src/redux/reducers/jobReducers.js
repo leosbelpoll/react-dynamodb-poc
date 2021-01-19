@@ -5,9 +5,9 @@ import {
   GET_JOB_FETCH,
   GET_JOB_SUCCESS,
   GET_JOB_ERROR,
-  REMOVE_JOB_FETCH,
-  REMOVE_JOB_SUCCESS,
-  REMOVE_JOB_ERROR,
+  REMOVE_JOBS_FETCH,
+  REMOVE_JOBS_SUCCESS,
+  REMOVE_JOBS_ERROR,
 } from "../actions/jobActions";
 
 const initialState = {
@@ -78,7 +78,7 @@ export default function (state = initialState, { type, payload }) {
         errorCurrentJob: payload,
       };
     }
-    case REMOVE_JOB_FETCH: {
+    case REMOVE_JOBS_FETCH: {
       return {
         ...state,
         loading: true,
@@ -86,7 +86,7 @@ export default function (state = initialState, { type, payload }) {
         errorRemoveJob: null,
       };
     }
-    case REMOVE_JOB_SUCCESS: {
+    case REMOVE_JOBS_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -94,7 +94,7 @@ export default function (state = initialState, { type, payload }) {
         errorRemoveJob: null,
       };
     }
-    case REMOVE_JOB_ERROR: {
+    case REMOVE_JOBS_ERROR: {
       return {
         ...state,
         loading: false,
