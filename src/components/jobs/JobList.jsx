@@ -49,7 +49,7 @@ function JobList({ jobsState, getJobsAction }) {
   return (
     <div>
       <PageTitle title="Job list" />
-      <JobDetail job={detailedJob} setDetailedJob={setDetailedJob} />
+      <JobDetail />
       {loading && <span>... Loading jobs</span>}
       {error && <span>An error ocurred loading jobs</span>}
       {jobs && !error && (

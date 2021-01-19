@@ -10,7 +10,7 @@ export const GET_JOB_SUCCESS = "GET_JOB_SUCCESS";
 export const GET_JOB_ERROR = "GET_JOB_ERROR";
 
 const awsConfig = {
-  version: "2011-12-05",
+  version: "2012-08-10",
   region: "us-east-1",
   endpoint: "http://dynamodb.us-east-1.amazonaws.com",
   accessKeyId: getEnv("AWS_ACCESS_KEY_ID"),
@@ -74,18 +74,18 @@ export const getJobError = (error) => ({
 export const getJobAction = (id) => {
   return (dispatch) => {
     dispatch(getJobFetch());
-    dynamoClient.scan(
+    dynamoClient.get(
       {
         TableName: "jobs",
         Key: {
-          id
+          "id": id
         }
       },
       function (error, data) {
         if (error) {
           dispatch(getJobError(error));
         } else {
-          dispatch(getJobSuccess(data));
+          dispatch(getJobSuccess(data.Item));
         }
       }
     );

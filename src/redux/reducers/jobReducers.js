@@ -11,7 +11,9 @@ const initialState = {
   jobs: [],
   currentJob: null,
   loading: false,
+  loadingCurrentJob: false,
   error: null,
+  errorCurrentJob: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -42,23 +44,25 @@ export default function (state = initialState, { type, payload }) {
     case GET_JOB_FETCH: {
       return {
         ...state,
-        loading: true,
-        error: null,
+        currentJob: null,
+        loadingCurrentJob: true,
+        errorCurrentJob: null,
       };
     }
     case GET_JOB_SUCCESS: {
       return {
         ...state,
-        currentJob: payload.job,
-        loading: false,
-        error: null,
+        currentJob: payload,
+        loadingCurrentJob: false,
+        errorCurrentJob: null,
       };
     }
     case GET_JOB_ERROR: {
       return {
         ...state,
-        loading: false,
-        error: payload,
+        currentJob: null,
+        loadingCurrentJob: false,
+        errorCurrentJob: payload,
       };
     }
     default:

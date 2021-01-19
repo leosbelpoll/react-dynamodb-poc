@@ -1,11 +1,19 @@
 import React, { Fragment } from "react";
+import { connect } from "react-redux";
+import { getJobAction } from "../../redux/actions/jobActions";
 
-export default function JobListItem({
+function JobListItem({
   job,
   selected,
   toogleSelectedJob,
   setDetailedJob,
+  getJobAction,
 }) {
+  function getJobDetails(job) {
+    getJobAction(job.id);
+    setDetailedJob(job)
+  }
+
   return (
     <tr className={selected && "table-secondary"}>
       <td>
@@ -20,7 +28,7 @@ export default function JobListItem({
       <td>
         <a
           href="#"
-          onClick={() => setDetailedJob(job)}
+          onClick={() => getJobDetails(job)}
           data-bs-toggle="modal"
           data-bs-target="#jobDetailModal"
         >
@@ -79,3 +87,11 @@ export default function JobListItem({
     </tr>
   );
 }
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getJobAction: (id) => dispatch(getJobAction(id)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(JobListItem);

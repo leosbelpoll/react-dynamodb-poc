@@ -1,6 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 
-export default function JobDetail({ job, setDetailedJob }) {
+function JobDetail({ jobsState }) {
+  const { currentJob, loadingCurrentJob, errorCurrentJob } = jobsState;
   function retryJob(job) {
     alert(`Retrying job: ${job.title}`);
   }
@@ -16,11 +18,24 @@ export default function JobDetail({ job, setDetailedJob }) {
       data-bs-keyboard="false"
     >
       <div className="modal-dialog">
-        {job && (
+        {loadingCurrentJob && (
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">... Loading selected job</h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        )}
+        {currentJob && (
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="jobDetailModalLabel">
-                Job: {job.title}
+                Job: {currentJob.title}
               </h5>
               <button
                 type="button"
@@ -39,7 +54,7 @@ export default function JobDetail({ job, setDetailedJob }) {
                     <input
                       className="form-control-plaintext"
                       readOnly
-                      value={324234}
+                      value={currentJob.id}
                       id="jobId"
                       aria-describedby="jobIdHelp"
                     />
@@ -54,7 +69,7 @@ export default function JobDetail({ job, setDetailedJob }) {
                     <input
                       className="form-control-plaintext"
                       readOnly
-                      value={324234}
+                      value={currentJob.completed ? "Completed" : "Pending"}
                       id="jobStatus"
                       aria-describedby="jobStatusHelp"
                     />
@@ -102,15 +117,14 @@ export default function JobDetail({ job, setDetailedJob }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={() => setDetailedJob(null)}
               >
                 Cancel
               </button>
-              {!job.completed && (
+              {!currentJob.completed && (
                 <button
                   type="button"
                   className="btn btn-success"
-                  onClick={() => retryJob(job)}
+                  onClick={() => retryJob(currentJob)}
                 >
                   Retry
                 </button>
@@ -122,3 +136,11 @@ export default function JobDetail({ job, setDetailedJob }) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    jobsState: state.jobsState,
+  };
+};
+
+export default connect(mapStateToProps)(JobDetail);
