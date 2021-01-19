@@ -1,6 +1,10 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { getJobAction, removeJobAction } from "../../redux/actions/jobActions";
+import {
+  addErrorNotification,
+  addSuccessNotification,
+} from "../../utils/notifications";
 
 function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
   function getJobDetails(job) {
@@ -68,7 +72,7 @@ function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
               <a
                 className="dropdown-item"
                 href="#"
-                onClick={() => removeJob(job.id)}
+                onClick={() => removeJob(job)}
               >
                 Remove
               </a>
@@ -94,7 +98,18 @@ function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     getJob: (id) => dispatch(getJobAction(id)),
-    removeJob: (id) => dispatch(removeJobAction(id)),
+    removeJob: (job) => {
+      const removeJob = window.confirm("Are you sure?");
+      if (removeJob) {
+        const { id, title } = job;
+        try {
+          dispatch(removeJobAction(id));
+          addSuccessNotification(`Job: ${title} was removed`);
+        } catch (error) {
+          addErrorNotification("Ooops: Error removing the job");
+        }
+      }
+    },
   };
 };
 

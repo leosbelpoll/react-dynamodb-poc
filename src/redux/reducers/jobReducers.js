@@ -5,15 +5,22 @@ import {
   GET_JOB_FETCH,
   GET_JOB_SUCCESS,
   GET_JOB_ERROR,
+  REMOVE_JOB_FETCH,
+  REMOVE_JOB_SUCCESS,
+  REMOVE_JOB_ERROR,
 } from "../actions/jobActions";
 
 const initialState = {
   jobs: [],
   currentJob: null,
   loading: false,
+  loadingJobs: false,
   loadingCurrentJob: false,
+  loadingRemoveJob: false,
   error: null,
+  errorJobs: null,
   errorCurrentJob: null,
+  errorRemoveJob: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -22,6 +29,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         loading: true,
+        loadingJobs: true,
         error: null,
       };
     }
@@ -31,6 +39,7 @@ export default function (state = initialState, { type, payload }) {
         // TODO: get the right structure with real API, just for POC porpuse
         jobs: payload,
         loading: false,
+        loadingJobs: false,
         error: null,
       };
     }
@@ -38,6 +47,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         loading: false,
+        loadingJobs: false,
         error: payload,
       };
     }
@@ -45,6 +55,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         currentJob: null,
+        loading: true,
         loadingCurrentJob: true,
         errorCurrentJob: null,
       };
@@ -53,6 +64,7 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         currentJob: payload,
+        loading: false,
         loadingCurrentJob: false,
         errorCurrentJob: null,
       };
@@ -61,8 +73,33 @@ export default function (state = initialState, { type, payload }) {
       return {
         ...state,
         currentJob: null,
+        loading: false,
         loadingCurrentJob: false,
         errorCurrentJob: payload,
+      };
+    }
+    case REMOVE_JOB_FETCH: {
+      return {
+        ...state,
+        loading: true,
+        loadingRemoveJob: true,
+        errorRemoveJob: null,
+      };
+    }
+    case REMOVE_JOB_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loadingRemoveJob: false,
+        errorRemoveJob: null,
+      };
+    }
+    case REMOVE_JOB_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        loadingRemoveJob: false,
+        errorRemoveJob: payload,
       };
     }
     default:

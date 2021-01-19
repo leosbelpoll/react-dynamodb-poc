@@ -14,7 +14,7 @@ function JobList({ jobsState, getJobsAction }) {
     getJobsAction();
   }, []);
 
-  const { jobs, loading, error } = jobsState;
+  const { jobs, error } = jobsState;
 
   const visibleJobs = jobs.filter(isJobVisible);
 
@@ -49,7 +49,6 @@ function JobList({ jobsState, getJobsAction }) {
     <div>
       <PageTitle title="Job list" />
       <JobDetail />
-      {loading && <span>... Loading jobs</span>}
       {error && <span>An error ocurred loading jobs</span>}
       {jobs && !error && (
         <Fragment>
