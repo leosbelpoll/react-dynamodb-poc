@@ -1,5 +1,4 @@
-import AWS from "aws-sdk";
-import { getEnv } from "../../utils/env";
+import JobModel from "../../dynamoose/models/jobModel";
 
 export const GET_JOBS_FETCH = "GET_JOBS_FETCH";
 export const GET_JOBS_SUCCESS = "GET_JOBS_SUCCESS";
@@ -8,18 +7,6 @@ export const GET_JOBS_ERROR = "GET_JOBS_ERROR";
 export const GET_JOB_FETCH = "GET_JOB_FETCH";
 export const GET_JOB_SUCCESS = "GET_JOB_SUCCESS";
 export const GET_JOB_ERROR = "GET_JOB_ERROR";
-
-const awsConfig = {
-  version: "2012-08-10",
-  region: "us-east-1",
-  endpoint: "http://dynamodb.us-east-1.amazonaws.com",
-  accessKeyId: getEnv("AWS_ACCESS_KEY_ID"),
-  secretAccessKey: getEnv("AWS_SECRET_ACCESS_KEY"),
-};
-
-AWS.config.update(awsConfig);
-
-const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 // Get jobs
 
@@ -38,20 +25,15 @@ export const getJobsError = (error) => ({
 });
 
 export const getJobsAction = () => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(getJobsFetch());
-    dynamoClient.scan(
-      {
-        TableName: "jobs",
-      },
-      function (error, data) {
-        if (error) {
-          dispatch(getJobsError(error));
-        } else {
-          dispatch(getJobsSuccess(data.Items));
-        }
-      }
-    );
+    try {
+      // const jobs = await JobModel.scan().exec();
+      const jobs = await JobModel.scan().exec();
+      dispatch(getJobsSuccess(jobs));
+    } catch (error) {
+      dispatch(getJobsError(error));
+    }
   };
 };
 
@@ -72,22 +54,13 @@ export const getJobError = (error) => ({
 });
 
 export const getJobAction = (id) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(getJobFetch());
-    dynamoClient.get(
-      {
-        TableName: "jobs",
-        Key: {
-          "id": id
-        }
-      },
-      function (error, data) {
-        if (error) {
-          dispatch(getJobError(error));
-        } else {
-          dispatch(getJobSuccess(data.Item));
-        }
-      }
-    );
+    try {
+      const job = await JobModel.get(id);
+      dispatch(getJobSuccess(job));
+    } catch (error) {
+      dispatch(getJobError(error));
+    }
   };
 };
