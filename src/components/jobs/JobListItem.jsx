@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
+import classNames from "classnames";
 import { getJobAction, removeJobAction } from "../../redux/actions/jobActions";
 import {
   addErrorNotification,
@@ -33,11 +34,16 @@ function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
         </a>
       </td>
       <td>
-        {job.completed ? (
-          <span className="badge bg-success">Completed</span>
-        ) : (
-          <span className="badge bg-warning">Pending</span>
-        )}
+        <span
+          className={classNames("badge", {
+            "bg-danger": job.status === "Failed",
+            "bg-info": job.status === "Processing",
+            "bg-warning": job.status === "Queued",
+            "bg-success": job.status === "Processed",
+          })}
+        >
+          {job.status}
+        </span>
       </td>
       <td>
         <div className="btn-group" role="group">

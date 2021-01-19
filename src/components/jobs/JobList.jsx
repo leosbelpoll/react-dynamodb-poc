@@ -19,11 +19,13 @@ function JobList({ jobsState, getJobsAction }) {
   const visibleJobs = jobs.filter(isJobVisible);
 
   function isJobVisible(job) {
-    const includeTitleFilter = job.title.includes(titleFilter);
+    const includeTitleFilter = job.title
+      .toLowerCase()
+      .includes(titleFilter.toLowerCase());
 
-    if (statusFilter === "completed")
-      return includeTitleFilter && job.completed;
-    if (statusFilter === "pending") return includeTitleFilter && !job.completed;
+    if (statusFilter !== "Any status")
+      return includeTitleFilter && job.status === statusFilter;
+
     return includeTitleFilter;
   }
 
@@ -69,9 +71,11 @@ function JobList({ jobsState, getJobsAction }) {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
-                <option>Select the status</option>
-                <option value="completed">Completed</option>
-                <option value="pending">Pending</option>
+                <option>Any status</option>
+                <option value="Processed">Processed</option>
+                <option value="Processing">Processing</option>
+                <option value="Queued">Queued</option>
+                <option value="Failed">Failed</option>
               </select>
             </div>
             <div className="col-2">

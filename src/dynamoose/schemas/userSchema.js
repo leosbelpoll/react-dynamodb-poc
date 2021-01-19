@@ -1,14 +1,13 @@
 import dynamoose from "dynamoose";
-import UserSchema from "./userSchema";
 
 export default new dynamoose.Schema(
   {
     id: Number,
-    title: String,
-    status: String,
-    user: UserSchema,
+    email: String,
+    name: String,
+    firstName: String,
     createdAt: String,
-    completedAt: String,
+    updatedAt: String,
   },
   {
     saveUnknown: true,
