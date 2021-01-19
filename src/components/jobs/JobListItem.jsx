@@ -1,17 +1,10 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import { getJobAction } from "../../redux/actions/jobActions";
+import { getJobAction, removeJobAction } from "../../redux/actions/jobActions";
 
-function JobListItem({
-  job,
-  selected,
-  toogleSelectedJob,
-  setDetailedJob,
-  getJobAction,
-}) {
+function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
   function getJobDetails(job) {
-    getJobAction(job.id);
-    setDetailedJob(job)
+    getJob(job.id);
   }
 
   return (
@@ -20,7 +13,7 @@ function JobListItem({
         <input
           type="checkbox"
           checked={selected}
-          onClick={() => toogleSelectedJob(job)}
+          onChange={() => toogleSelectedJob(job)}
         />
       </td>
       <th scope="row">{job.id}</th>
@@ -69,15 +62,25 @@ function JobListItem({
                     Retry
                   </a>
                 </li>
-                <li>
-                  <a className="dropdown-item" href="#">
-                    Remove
-                  </a>
-                </li>
               </Fragment>
             )}
             <li>
-              <a className="dropdown-item" href="#">
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => removeJob(job.id)}
+              >
+                Remove
+              </a>
+            </li>
+            <li>
+              <a
+                className="dropdown-item"
+                href="#"
+                onClick={() => getJobDetails(job)}
+                data-bs-toggle="modal"
+                data-bs-target="#jobDetailModal"
+              >
                 Detail
               </a>
             </li>
@@ -90,7 +93,8 @@ function JobListItem({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getJobAction: (id) => dispatch(getJobAction(id)),
+    getJob: (id) => dispatch(getJobAction(id)),
+    removeJob: (id) => dispatch(removeJobAction(id)),
   };
 };
 

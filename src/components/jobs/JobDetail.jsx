@@ -11,44 +11,23 @@ function JobDetail({ jobsState }) {
     <div
       className="modal fade"
       id="jobDetailModal"
-      tabindex="-1"
+      tabIndex="-1"
       aria-labelledby="jobDetailModalLabel"
       aria-hidden="false"
       data-bs-backdrop="static"
       data-bs-keyboard="false"
     >
       <div className="modal-dialog">
-        {loadingCurrentJob && (
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">... Loading selected job</h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-        )}
+        {loadingCurrentJob && <ModalHeader title="... Loading selected job" />}
+        {errorCurrentJob && <ModalHeader title="Ooops: Error getting" />}
         {currentJob && (
           <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="jobDetailModalLabel">
-                Job: {currentJob.title}
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
+            <ModalHeader title={`Job: ${currentJob.title}`} />
             <div className="modal-body">
               <form>
                 <div className="row mb-4">
                   <div className="col">
-                    <label for="jobId" className="form-label">
+                    <label htmlFor="jobId" className="form-label">
                       Id
                     </label>
                     <input
@@ -63,7 +42,7 @@ function JobDetail({ jobsState }) {
                     </div>
                   </div>
                   <div className="col">
-                    <label for="jobStatus" className="form-label">
+                    <label htmlFor="jobStatus" className="form-label">
                       Status
                     </label>
                     <input
@@ -80,7 +59,7 @@ function JobDetail({ jobsState }) {
                 </div>
                 <div className="row mb-4">
                   <div className="col">
-                    <label for="jobDefinition" className="form-label">
+                    <label htmlFor="jobDefinition" className="form-label">
                       Definition
                     </label>
                     <input
@@ -95,7 +74,7 @@ function JobDetail({ jobsState }) {
                     </div>
                   </div>
                   <div className="col">
-                    <label for="jobStartedAt" className="form-label">
+                    <label htmlFor="jobStartedAt" className="form-label">
                       Started at
                     </label>
                     <input
@@ -132,6 +111,22 @@ function JobDetail({ jobsState }) {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function ModalHeader({ title }) {
+  return (
+    <div className="modal-content">
+      <div className="modal-header">
+        <h5 className="modal-title">{title}</h5>
+        <button
+          type="button"
+          className="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
     </div>
   );

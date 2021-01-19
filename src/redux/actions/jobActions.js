@@ -8,6 +8,10 @@ export const GET_JOB_FETCH = "GET_JOB_FETCH";
 export const GET_JOB_SUCCESS = "GET_JOB_SUCCESS";
 export const GET_JOB_ERROR = "GET_JOB_ERROR";
 
+export const REMOVE_JOB_FETCH = "REMOVE_JOB_FETCH";
+export const REMOVE_JOB_SUCCESS = "REMOVE_JOB_SUCCESS";
+export const REMOVE_JOB_ERROR = "REMOVE_JOB_ERROR";
+
 // Get jobs
 
 export const getJobsFetch = () => ({
@@ -28,7 +32,6 @@ export const getJobsAction = () => {
   return async (dispatch) => {
     dispatch(getJobsFetch());
     try {
-      // const jobs = await JobModel.scan().exec();
       const jobs = await JobModel.scan().exec();
       dispatch(getJobsSuccess(jobs));
     } catch (error) {
@@ -61,6 +64,34 @@ export const getJobAction = (id) => {
       dispatch(getJobSuccess(job));
     } catch (error) {
       dispatch(getJobError(error));
+    }
+  };
+};
+
+// Remove job
+
+export const removeJobFetch = () => ({
+  type: REMOVE_JOB_FETCH,
+});
+
+export const removeJobSuccess = () => ({
+  type: REMOVE_JOB_SUCCESS,
+});
+
+export const removeJobError = (error) => ({
+  type: REMOVE_JOB_ERROR,
+  payload: error,
+});
+
+export const removeJobAction = (id) => {
+  return async (dispatch) => {
+    dispatch(removeJobFetch());
+    try {
+      await JobModel.delete(id);
+      dispatch(removeJobSuccess());
+      dispatch(getJobsAction());
+    } catch (error) {
+      dispatch(removeJobError(error));
     }
   };
 };

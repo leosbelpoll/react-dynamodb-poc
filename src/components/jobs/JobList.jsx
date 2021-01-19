@@ -9,7 +9,6 @@ function JobList({ jobsState, getJobsAction }) {
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState();
   const [selectedJobs, setSelectedJobs] = useState([]);
-  const [detailedJob, setDetailedJob] = useState();
 
   useEffect(() => {
     getJobsAction();
@@ -123,7 +122,7 @@ function JobList({ jobsState, getJobsAction }) {
                   <input
                     type="checkbox"
                     checked={selectedJobs.length === jobs.length}
-                    onClick={() => {
+                    onChange={() => {
                       if (selectedJobs.length !== jobs.length) {
                         setSelectedJobs([...jobs]);
                       } else {
@@ -146,7 +145,6 @@ function JobList({ jobsState, getJobsAction }) {
                   key={job.id}
                   selected={isSelectedJob(job)}
                   toogleSelectedJob={toogleSelectedJob}
-                  setDetailedJob={setDetailedJob}
                 />
               ))}
             </tbody>
