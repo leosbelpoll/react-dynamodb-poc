@@ -7,7 +7,7 @@ import JobDetail from "./JobDetail";
 
 function JobList({ jobsState, getJobsAction }) {
   const [titleFilter, setTitleFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState();
+  const [statusFilter, setStatusFilter] = useState("any");
   const [selectedJobs, setSelectedJobs] = useState([]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function JobList({ jobsState, getJobsAction }) {
       .toLowerCase()
       .includes(titleFilter.toLowerCase());
 
-    if (statusFilter !== "Any status")
+    if (statusFilter !== "any")
       return includeTitleFilter && job.status === statusFilter;
 
     return includeTitleFilter;
@@ -71,7 +71,7 @@ function JobList({ jobsState, getJobsAction }) {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
-                <option>Any status</option>
+                <option value="any">Any status</option>
                 <option value="Processed">Processed</option>
                 <option value="Processing">Processing</option>
                 <option value="Queued">Queued</option>
