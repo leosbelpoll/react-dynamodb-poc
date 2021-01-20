@@ -1,4 +1,8 @@
-import JobModel from "../../dynamoose/models/jobModel";
+import {
+  getJob,
+  getJobs,
+  removeJobs,
+} from "../../dynamoose/queries/jobQueries";
 
 export const GET_JOBS_FETCH = "GET_JOBS_FETCH";
 export const GET_JOBS_SUCCESS = "GET_JOBS_SUCCESS";
@@ -32,10 +36,11 @@ export const getJobsAction = () => {
   return async (dispatch) => {
     dispatch(getJobsFetch());
     try {
-      const jobs = await JobModel.scan().exec();
+      const jobs = await getJobs();
       dispatch(getJobsSuccess(jobs));
     } catch (error) {
       dispatch(getJobsError(error));
+      throw new Error(error);
     }
   };
 };
@@ -60,10 +65,11 @@ export const getJobAction = (id) => {
   return async (dispatch) => {
     dispatch(getJobFetch());
     try {
-      const job = await JobModel.get(id);
+      const job = await getJob(id);
       dispatch(getJobSuccess(job));
     } catch (error) {
       dispatch(getJobError(error));
+      throw new Error(error);
     }
   };
 };
@@ -87,15 +93,22 @@ export const removeJobsAction = (ids) => {
   return async (dispatch) => {
     dispatch(removeJobsFetch());
     try {
-      await JobModel.batchDelete(ids);
+      await removeJobs(ids);
       dispatch(removeJobsSuccess());
       dispatch(getJobsAction());
     } catch (error) {
       dispatch(removeJobsError(error));
+      throw new Error(error);
     }
   };
 };
 
 export const removeJobAction = (id) => {
-  return (dispatch) => dispatch(removeJobsAction([id]))
+  return (dispatch) => {
+    try {
+      dispatch(removeJobsAction([id]));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 };

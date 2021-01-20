@@ -188,8 +188,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getJobsAction: () => dispatch(getJobsAction()),
     removeJobsAction: (jobs) => {
-      const ids = jobs.map((job) => job.id);
-      dispatch(removeJobsAction(ids));
+      try {
+        const ids = jobs.map((job) => job.id);
+        dispatch(removeJobsAction(ids));
+      } catch (error) {
+        throw new Error(error);
+      }
     },
   };
 };
