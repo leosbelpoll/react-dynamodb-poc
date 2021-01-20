@@ -1,19 +1,30 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import classNames from "classnames";
-import { getJobAction, removeJobAction } from "../../redux/actions/jobActions";
+import {
+  getJobAction,
+  removeJobAction,
+  retryJobAction,
+} from "../../redux/actions/jobActions";
 import {
   addErrorNotification,
   addSuccessNotification,
 } from "../../utils/notifications";
 
-function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
+function JobListItem({
+  job,
+  selected,
+  toogleSelectedJob,
+  getJob,
+  removeJob,
+  retryJob,
+}) {
   function getJobDetails(job) {
     getJob(job.id);
   }
 
   return (
-    <tr className={selected && "table-secondary"}>
+    <tr className={selected ? "table-secondary" : ""}>
       <td>
         <input
           type="checkbox"
@@ -68,7 +79,11 @@ function JobListItem({ job, selected, toogleSelectedJob, getJob, removeJob }) {
             ) : (
               <Fragment>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    onClick={() => retryJob(job)}
+                  >
                     Retry
                   </a>
                 </li>
@@ -113,6 +128,22 @@ const mapDispatchToProps = (dispatch) => {
           addSuccessNotification(`Job: ${title} was removed`);
         } catch (error) {
           addErrorNotification("Ooops: Error removing the job");
+        }
+      }
+    },
+    retryJob: (job) => {
+      const retryJobConfirmation = window.confirm("Are you sure?");
+      if (retryJobConfirmation) {
+        const { title } = job;
+        const updatedJob = {
+          ...job,
+          status: "Queued",
+        };
+        try {
+          dispatch(retryJobAction(updatedJob));
+          addSuccessNotification(`Job: ${title} was queued`);
+        } catch (error) {
+          addErrorNotification("Ooops: Error retrying the job");
         }
       }
     },

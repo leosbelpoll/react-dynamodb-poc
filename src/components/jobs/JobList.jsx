@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {
   getJobsAction,
   removeJobsAction,
+  retryJobsAction,
 } from "../../redux/actions/jobActions";
 import PageTitle from "../parts/PageTitle";
 import JobListItem from "./JobListItem";
@@ -12,7 +13,12 @@ import {
   addSuccessNotification,
 } from "../../utils/notifications";
 
-function JobList({ jobsState, getJobsAction, removeJobsAction }) {
+function JobList({
+  jobsState,
+  getJobsAction,
+  removeJobsAction,
+  retryJobsAction,
+}) {
   const [titleFilter, setTitleFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("any");
   const [selectedJobs, setSelectedJobs] = useState([]);
@@ -50,8 +56,16 @@ function JobList({ jobsState, getJobsAction, removeJobsAction }) {
     }
   }
 
-  function retryJobs() {
-    alert(`Retrying jobs: ${selectedJobs.map((job) => job.title).toString()}`);
+  async function retryJobs() {
+    const retryJobsConfirmation = window.confirm("Are you sure?");
+    if (retryJobsConfirmation) {
+      try {
+        await retryJobsAction(selectedJobs);
+        addSuccessNotification("Jobs queues successfuly");
+      } catch (error) {
+        addErrorNotification("Oops: Error retrying jobs");
+      }
+    }
   }
 
   function removeJobs() {
@@ -60,6 +74,7 @@ function JobList({ jobsState, getJobsAction, removeJobsAction }) {
       try {
         removeJobsAction(selectedJobs);
         addSuccessNotification("Jobs removes successfuly");
+        setSelectedJobs([]);
       } catch (error) {
         addErrorNotification("Oops: Error removing jobs");
       }
@@ -126,7 +141,7 @@ function JobList({ jobsState, getJobsAction, removeJobsAction }) {
                         !selectedJobs.length && "disabled"
                       }`}
                       href="#"
-                      onClick={() => removeJobs()}
+                      onClick={removeJobs}
                     >
                       Remove jobs
                     </a>
@@ -144,10 +159,12 @@ function JobList({ jobsState, getJobsAction, removeJobsAction }) {
                 <th>
                   <input
                     type="checkbox"
-                    checked={selectedJobs.length === jobs.length}
+                    checked={
+                      selectedJobs.length && selectedJobs.length === jobs.length
+                    }
                     onChange={() => {
-                      if (selectedJobs.length !== jobs.length) {
-                        setSelectedJobs([...jobs]);
+                      if (selectedJobs.length === 0) {
+                        setSelectedJobs(visibleJobs);
                       } else {
                         setSelectedJobs([]);
                       }
@@ -191,6 +208,17 @@ const mapDispatchToProps = (dispatch) => {
       try {
         const ids = jobs.map((job) => job.id);
         dispatch(removeJobsAction(ids));
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    retryJobsAction: (jobs) => {
+      try {
+        const updatedJobs = jobs.map((job) => ({
+          ...job,
+          status: "Queued",
+        }));
+        dispatch(retryJobsAction(updatedJobs));
       } catch (error) {
         throw new Error(error);
       }

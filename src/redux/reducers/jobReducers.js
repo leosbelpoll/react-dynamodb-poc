@@ -8,6 +8,9 @@ import {
   REMOVE_JOBS_FETCH,
   REMOVE_JOBS_SUCCESS,
   REMOVE_JOBS_ERROR,
+  RETRY_JOBS_FETCH,
+  RETRY_JOBS_SUCCESS,
+  RETRY_JOBS_ERROR,
 } from "../actions/jobActions";
 
 const initialState = {
@@ -17,10 +20,12 @@ const initialState = {
   loadingJobs: false,
   loadingCurrentJob: false,
   loadingRemoveJob: false,
+  loadingRetryJob: false,
   error: null,
   errorJobs: null,
   errorCurrentJob: null,
   errorRemoveJob: null,
+  errorRetryJob: null,
 };
 
 export default function (state = initialState, { type, payload }) {
@@ -100,6 +105,30 @@ export default function (state = initialState, { type, payload }) {
         loading: false,
         loadingRemoveJob: false,
         errorRemoveJob: payload,
+      };
+    }
+    case RETRY_JOBS_FETCH: {
+      return {
+        ...state,
+        loading: true,
+        loadingRetryJob: true,
+        errorRetryJob: null,
+      };
+    }
+    case RETRY_JOBS_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        loadingRetryJob: false,
+        errorRetryJob: null,
+      };
+    }
+    case RETRY_JOBS_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        loadingRetryJob: false,
+        errorRetryJob: payload,
       };
     }
     default:
