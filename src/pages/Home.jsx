@@ -1,7 +1,33 @@
 import React from "react";
+import ChartistGraph from "react-chartist";
 import PageTitle from "../components/parts/PageTitle";
 
 export default function Home() {
+  const data = {
+    series: [
+      {
+        value: 20,
+        name: "Serie 1"
+      },
+      {
+        value: 10,
+        name: "Serie 2"
+      },
+      {
+        value: 70,
+        name: "Serie 3"
+      } 
+    ]
+  };
+
+  const options = {
+    width: "300px",
+    height: "300px",
+    donut: false
+  };
+
+  const type = "Pie";
+
   return (
     <div className="row">
       <div className="col-lg-12">
@@ -87,6 +113,9 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="col-xs-12 mt-4">
+        <ChartistGraph data={data} options={options} type={type} />
       </div>
     </div>
   );

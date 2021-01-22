@@ -13,10 +13,10 @@ export default function PrivateRouter() {
         <div className="mt-4">
           <Switch>
             <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="/jobs">
               <JobList />
+            </Route>
+            <Route exact path="/dash">
+              <Home />
             </Route>
             <Route exact path="/login">
               <Redirect to="/" />

@@ -27,12 +27,12 @@ function Header({ jobsState }) {
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/">
-                  Home
+                  Jobs
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" aria-current="page" to="/jobs">
-                  Jobs
+                <Link className="nav-link" aria-current="page" to="/dash">
+                  Dummy Dash
                 </Link>
               </li>
             </ul>
