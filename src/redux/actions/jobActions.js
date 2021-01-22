@@ -1,9 +1,5 @@
-import {
-  getJob,
-  getJobs,
-  removeJobs,
-  updateJobs,
-} from "../../dynamoose/queries/jobQueries";
+const API_URL = process.env.REACT_APP_API_URL;
+const JOBS_URL = API_URL + "/jobs";
 
 export const GET_JOBS_FETCH = "GET_JOBS_FETCH";
 export const GET_JOBS_SUCCESS = "GET_JOBS_SUCCESS";
@@ -41,7 +37,8 @@ export const getJobsAction = () => {
   return async (dispatch) => {
     dispatch(getJobsFetch());
     try {
-      const jobs = await getJobs();
+      const response = await fetch(JOBS_URL);
+      const jobs = await response.json();
       dispatch(getJobsSuccess(jobs));
     } catch (error) {
       dispatch(getJobsError(error));
@@ -70,7 +67,8 @@ export const getJobAction = (id) => {
   return async (dispatch) => {
     dispatch(getJobFetch());
     try {
-      const job = await getJob(id);
+      const response = await fetch(JOBS_URL + "/" + id);
+      const job = await response.json();
       dispatch(getJobSuccess(job));
     } catch (error) {
       dispatch(getJobError(error));
@@ -98,7 +96,17 @@ export const removeJobsAction = (ids) => {
   return async (dispatch) => {
     dispatch(removeJobsFetch());
     try {
-      await removeJobs(ids);
+      const response = await fetch(JOBS_URL, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          ids,
+        }),
+      });
+      await response.json();
       dispatch(removeJobsSuccess());
       dispatch(getJobsAction());
     } catch (error) {
@@ -137,7 +145,17 @@ export const retryJobsAction = (jobs) => {
   return async (dispatch) => {
     dispatch(retryJobsFetch());
     try {
-      await updateJobs(jobs);
+      const response = await fetch(JOBS_URL, {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          jobs,
+        }),
+      });
+      await response.json();
       dispatch(retryJobsSuccess());
       dispatch(getJobsAction());
     } catch (error) {

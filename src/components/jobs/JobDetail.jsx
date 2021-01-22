@@ -65,7 +65,7 @@ function JobDetail({ jobsState }) {
                     <input
                       className="form-control-plaintext"
                       readOnly
-                      value={324234}
+                      value="Dummy value"
                       id="jobDefinition"
                       aria-describedby="jobDefinitionHelp"
                     />
@@ -80,7 +80,7 @@ function JobDetail({ jobsState }) {
                     <input
                       className="form-control-plaintext"
                       readOnly
-                      value={324234}
+                      value="Dummy value"
                       id="jobStartedAt"
                       aria-describedby="jobStartedAtHelp"
                     />
@@ -97,17 +97,8 @@ function JobDetail({ jobsState }) {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
-                Cancel
+                Close
               </button>
-              {!currentJob.completed && (
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={() => retryJob(currentJob)}
-                >
-                  Retry
-                </button>
-              )}
             </div>
           </div>
         )}

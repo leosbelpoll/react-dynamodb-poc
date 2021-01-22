@@ -1,9 +1,19 @@
-# React DynamoDB PoC
+# React PoC
 
 ## Usage
 
 Copy `.env_TEMPLATE` file to `.env` en set current  values.
 
-## Generate fake data
+Run the next commands:
 
-Run in the command line ```aws dynamodb batch-write-item --region us-east-1 --request-items file://./jobs.json```
+```shell
+yarn install
+yarn start
+```
+
+Go to `http://localhost:3000`
+
+## Dependencies used
+
+[Redux](https://es.redux.js.org/)
+[React router](https://reactrouter.com/)

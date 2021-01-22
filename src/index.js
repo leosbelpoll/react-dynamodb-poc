@@ -1,14 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import dynamoose from "dynamoose";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
-dynamoose.aws.sdk.config.update({
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-  region: process.env.REACT_APP_AWS_REGION,
-});
 
 ReactDOM.render(
   <React.StrictMode>

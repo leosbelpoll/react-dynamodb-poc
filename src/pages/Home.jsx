@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="row">
       <div className="col-lg-12">
-        <PageTitle title="React Discovery PoC" />
+        <PageTitle title="React PoC: Fake dashboard" />
         <div className="row">
           <div className="col-sm-6">
             <div className="card card-body">

@@ -10,7 +10,7 @@ function Header({ jobsState }) {
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            React Discovery POC
+            React DynamoDB API POC
           </Link>
           <button
             className="navbar-toggler"
@@ -34,30 +34,6 @@ function Header({ jobsState }) {
                 <Link className="nav-link" aria-current="page" to="/jobs">
                   Jobs
                 </Link>
-              </li>
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Actions
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Retry failed jobs
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
               </li>
             </ul>
           </div>
